@@ -19,9 +19,9 @@ const database ={
         },
         {
             id :'124',
-            name: 'Sally',
-            email:'Sally@gmail.com',
-            password: 'banabas',
+            name: 'Ali',
+            email:'Ali@gmail.com',
+            password: '123',
             entries: 0,
             joined: new Date()
         }
@@ -33,11 +33,12 @@ app.get('/',(req,res) => {
 });
 
 app.post('/signin',(req,res) => {
-    if(req.body.email === database.users[0].email &&
-        req.body.password === database.users[0].password){
+    if(req.body.email === database.users[1].email &&
+        req.body.password === database.users[1].password){
             res.json('success');
         }else{
-            res.status(400).json("error logging in");
+            //res.status(400).json("error logging innnnnn");
+            res.json("error logging innnn");
         }
 });
 
