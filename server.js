@@ -1,6 +1,17 @@
 const express = require('express');
 const bcrypt =require('bcrypt-nodejs');
 const cors = require('cors');
+const knex = require('knex')
+
+const db = knex({
+    client: 'pg',
+    connection: {
+      host : '127.0.0.1',
+      user : 'minamazloomi',
+      password : '',
+      database : 'smart-brain'
+    }
+  });
 
 const app = express();
 
@@ -13,7 +24,7 @@ const database ={
             id :'123',
             name: 'John',
             email:'John@gmail.com',
-            password: 'cookies',
+            password: '123',
             entries: 0,
             joined: new Date()
         },
@@ -33,9 +44,9 @@ app.get('/',(req,res) => {
 });
 
 app.post('/signin',(req,res) => {
-    if(req.body.email === database.users[1].email &&
-        req.body.password === database.users[1].password){
-            res.json('success');
+    if(req.body.email === database.users[0].email &&
+        req.body.password === database.users[0].password){
+            res.json(database.users[0]);
         }else{
             //res.status(400).json("error logging innnnnn");
             res.json("error logging innnn");
@@ -44,14 +55,12 @@ app.post('/signin',(req,res) => {
 
 app.post('/register',(req,res) => {
     const {email, name, password} = req.body;
-    database.users.push({
-        id :'125',
-        name: name,
+    db('users').insert({
         email: email,
-        password: password,
-        entries: 0,
-        joined: new Date() 
-    });
+        name : name,
+        joined : new Date()
+    }).then(console.log)
+
     res.json(database.users[database.users.length-1]);
 });
 
@@ -70,7 +79,7 @@ app.get('/profile/:id',(req,res)=>{
     
 });
 
-app.post('/image',(req,res) =>{
+app.put('/image',(req,res) =>{
     const {id} = req.body;
     let found = false;
     database.users.forEach( user => {
